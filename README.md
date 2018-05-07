@@ -1,0 +1,3 @@
+#YDKJS-Blog#
+
+As I go through the book course, I will follow along with concepts and code snippets and insights. This is a place for me to store all of this. First up is You Don't Know JavaScript - Up and Going...
