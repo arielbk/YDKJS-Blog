@@ -1,4 +1,4 @@
-# Notes for (You Don't Know JavaScript - Up and Going)[https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch2.md]
+# Notes for [You Don't Know JavaScript - Up and Going](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch2.md)
 
 I will probably try to get through this first book quickly because I have worked with JavaScript a little bit before and I have a grasp some of the more foundational programming ideas.
 
