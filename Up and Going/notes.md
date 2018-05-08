@@ -167,8 +167,24 @@ function makeAdder(x) {
 var addFive = makeAdder(5);
 console.log(addFive(2)); // 7
 
-var addNine = makeAdder(9);
-console.log(addNine(14)); // 23
 ```
 
-Why does this work the way it does?
+So when the makeAdder function is invoked by assigning it to a variable, a value is passed in. For `addFive` this is 5. That value is then passed into the `add` function within `makeAdder` and there it is **remembered**.
+
+`makeAdder` then actually returns the function within itself, `add()`, along with the value that was passed into it and saved.
+
+So when makeAdder returns the function the variable definition effectively becomes:
+
+```javascript
+var addFive = function add(y) {
+                return 5 + y;
+              }
+```
+So, now addFive can be used as a normal function.
+
+Closures are particularly helpful with public APIs, variables can be instantiated from a function and values can be stored inside them privately. Still struggling to get my head around this one, but I'm sure it will come with practice.
+
+Scopes and Closures is the next book, after all.
+
+## This identifier
+Okay, this will be interesting to look at. I have been using `this` for a while now, and I sort of know what its all about, but not really...
