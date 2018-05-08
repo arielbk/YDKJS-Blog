@@ -4,7 +4,10 @@ I will probably try to get through this first book quickly because I have worked
 
 But that's it, they are foundational. That's why it is necessary for me to go through and revisit from time to time. I will be typing (not copy and pasting) and testing out all the code snippets I come across also.
 
+
 ## 7 types in JavaScript:
+The **values** in JS are typed rather than the **variables** themselves.
+
 - `string`
 - `number`
 - `boolean`
@@ -15,4 +18,28 @@ But that's it, they are foundational. That's why it is necessary for me to go th
 I can use `typeof x;` to find out the type of a value, it returns a `string` value.
 `typeof null;` returns `"object"`; apparently its a bug.
 
+
 ## Objects
+Consist of a key and a value, each element is a 'key–value pair'. A key can contain any type of value.
+
+Dot notation and bracket notation - dot notation is usually preferable because it is easier to read and more concise.
+
+Bracket notation can be useful when plugging in a variable as a key within the object.
+
+Moving on: arrays and functions are actually like subtypes of objects...
+
+Arrays are denoted by square brackets, e.g: `var names = ['James', 'Somboon', 'Akansha']`
+They are a special type of object that uses an index number (starting at 0) as a key.
+
+Functions are also a subtype of objects, even though `typeof` returns `'object'`
+Functions can have properties but they are not often used.
+
+Note the difference between `typeof foo` when foo is a function – and `typeof foo()`, which will plug in and check the type of whatever is returned by the foo function.
+
+
+## The built-in types have method and properties by default
+```javascript
+a.length // property that returns the length of the variable`
+a.toUpperCase() // returns a string with all uppercase letters
+a.toFixed(x) // returns a float to x decimal places
+```
