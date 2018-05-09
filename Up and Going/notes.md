@@ -166,7 +166,6 @@ function makeAdder(x) {
 
 var addFive = makeAdder(5);
 console.log(addFive(2)); // 7
-
 ```
 
 So when the makeAdder function is invoked by assigning it to a variable, a value is passed in. For `addFive` this is 5. That value is then passed into the `add` function within `makeAdder` and there it is **remembered**.
@@ -188,3 +187,42 @@ Scopes and Closures is the next book, after all.
 
 ## This identifier
 Okay, this will be interesting to look at. I have been using `this` for a while now, and I sort of know what its all about, but not really...
+
+**`this` does not refer to the function itself, but rather how it was called**
+
+`this` can work in one of four ways:
+- if there is nothing within a simple function call that `this` can refer to, it will search for global variable, or return `undefined` in strict-mode
+- if you call a function as a value within an object, `this` is the object that the function is within
+- when the call() method is used, `this` belongs to the function where the call is
+- if you use `new` then this is reset to a brand new instance of the function
+
+## Prototypes
+If you reference a property on an object and it doesn't exist on that object explicitly, the objects prototype will be searched as a sort of 'fallback'.
+
+This behaviour can emulate class and inheritance, but it is not that. Far more beneficial is 'behaviour delegation', covered later in the books.
+
+## Old and New
+Many of the techniques in JS will not work on older browsers, and this needs to be addressed. We have two options: polyfilling and transpiling.
+
+### Polyfilling
+A term coined by Remy Sharp in 2010. It is basically a fallback option that provides the same or similar functionality for older browsers.
+
+Be really careful when trying to implement a polyfill yourself, and stick as closely to specification as possible. Safer option is to use a polyfill or a shim already out tehre
+
+### Transpiling
+Transpiling is a portmanteau of transforming and compiling. It is necessary when there is whole new **syntax** added to the language. It is not possible to polyfill these.
+
+By using a polyfill we can produce more current readable and performance-optimised code while still serving functional code to older browsers.
+
+JS is changing constantly, so get into the habit of using a transpiler now.
+
+### Non-JavaScript
+A lot of the stuff that we write in JS is not actually directly controlled by JavaScript itself.
+
+Think about the DOM API. That's just what it is: an API. It is an interface that interacts with the browser, many of which are written in C or C++. `document.getElementById()`, `alert()` or `console.log()` are all just ways that JS can interface with the browser itself.
+
+Keep this in mind.
+
+## Review
+
+This has been a run-through of the foundations of JavaScript programming. The following books will get into some of the more gritty details of the language.
