@@ -1,6 +1,6 @@
 # Notes for You Don't Know JavaScript - Up and Going
 
-The original book can be found [here](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch2.md)
+The original book can be found [here](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20&%20going/README.md)
 
 I have used JavaScript a little bit before, but here I am starting from the beginning. These ideas are foundational, and that's why it is necessary to go through and revisit them from time to time. I will be typing (not copy and pasting) and testing out all the code snippets I come across and really trying to get a firm grasp of the concepts that I come across, then relaying them here in (as much as I can) my own words.
 
@@ -60,7 +60,7 @@ var a = 42;
 var b = "1";
 var result = a * b; // returns the number 43
 ```
-Even though b is actually a string, this works because it is **implicitly coerced**.
+Even though b is actually a string, this works because `var b` is **implicitly coerced**.
 
 But be careful, because: `result = a + b;` will return '421', instead treating both as strings and concatenating...
 
@@ -210,3 +210,5 @@ Keep this in mind.
 ## Review
 
 This has been a run-through of the foundations of JavaScript programming. The following books will get into some of the more gritty details of the language.
+
+Thinking about it, I'm still not entirely sure why you would assign a function to a variable in the first place. Why do this when you can just name the variable... The answer will become clear very soon, I'm sure.
