@@ -9,9 +9,9 @@ This is not a replacement for the books themselves; these are just my notes. Go 
 
 If you notice any mistakes or weak areas (grammar wise -- or if you think I have misrepresented a concept) please make a pull request and correct the changes. I encourage anyone out there to improve these notes.
 
-[Up and Going](/Up%20And%20Going)
-[Scope and Closures](/Scope%20And%20Closures) **(in progress)**
-This and Object Prototypes
-Types and Grammar
-Async and Performance
-ES6 and Beyond
+1. [Up and Going](/Up%20And%20Going)
+2. [Scope and Closures](/Scope%20And%20Closures) **(in progress)**
+3. This and Object Prototypes
+4. Types and Grammar
+5. Async and Performance
+6. ES6 and Beyond
