@@ -28,7 +28,7 @@ logger(42);
 ```
 (Function is declared - actually not a LHS lookup because it is handled by the compiler...) -> Answer variable within function is declared (LHS) -> Logger function is called (RHS lookup) -> 42 is assigned to answer within logger (LHS) -> log method is called within the console object (RHS) -> answer variable is passed into console log (RHS) ... phew!
 
-## Nested scope
+### Nested scope
 There are actually multiple scopes. If an RHS lookup not return anything the engine would attempt to move up one layer of scope until it reached the topmost layer (the global scope).
 
 ReferenceErrors are scope related - the LHS lookup was unsuccessful
@@ -38,7 +38,7 @@ Lexical scope is in contrast to *dynamic scope*, which is used by a small number
 
 Lexical scope pertains to the process where the source code undergoes lexing/tokenizing, where it is broken up into meaningful (to a computer) pieces. Lexical scope is therefore scope that is defined at the time when this lexing occurs, at this point it is (or should be) set in stone.
 
-## Lookups
+### Lookups
 Look ups happen from where they are called, and then further outer scopes are searched until they are found. **It is just the first matches that are returned.** This is a useful example:
 
 ```javascript
@@ -58,7 +58,7 @@ In this case, although the variables a, b and c have been declared in the global
 
 Look up occurs first within the bar function, then the foo function. At this point the variables are found, thus the look up stops. This is a case in which the inner variables *shadow* those in the global scope.
 
-## Cheating Lexical
+### Cheating Lexical
 There are some ways to 'cheat' lexical scope, but they are generally frowned upon and lead to poorer performance. Basically, you should avoid them because they are not worth the performance tradeoff.
 
 `eval()` is one way - it can insert dynamically produced code as if it were there from the start, and thus modify lexical scope. In strict mode, however, it creates its own scope.
@@ -69,4 +69,125 @@ There are some ways to 'cheat' lexical scope, but they are generally frowned upo
 
 Strict mode completely disallows `with` and it restricts `eval()` in some instances
 
-The JS Engine has a number of optimisations for compiling code, and these are undermined by cheating lexical scope. It is best practice to just not do it.
+The JS Engine has a number of optimisations for compiling code, and these are undermined by cheating lexical scope. It is best practice to just not do it, and your code will be faster for it.
+
+
+## Function vs. Block Scope
+**Generally** it is only functions that create scope. So that means that any variables or functions defined within a function are only accessible within that function.
+
+### 'Hiding' variables with function scope
+Perhaps the more intuitive way to think of functions is to create a function, and then to write code inside it. But here's another way: we use functions to wrap already existing pieces of code into self-contained units.
+
+By wrapping blocks of code in functions we are able to hide their inner components. This is useful in light of the software design principle 'Principle of Least Privilege'.
+
+The aim of this principle is to optimise security and to only show what is minimally necessary; to only allow access to what is needed for the user.
+
+So, instead of declaring variables in the global scope, if they are only required within a particular function, then declare them within the function itself. This is better software design.
+
+**Not only that, but declaring variables inside of functions will lead to less collisions in the outer scope**
+
+Code libraries will often define a ***global namespace*** where are all variables within the library are defined as properties within an object:
+```javascript
+var exampleLibrary = {
+  itemName: "name",
+  addItem: function() {
+    // function to 'add an item', for example
+  },
+  deleteItem: function() {
+    // function to 'delete an item', for example
+  }
+}
+```
+In this example the variable `itemName` and the functions `addItem` and `deleteItem` are not global, they are instead defined within the *namespace* of `exampleLibrary`
+
+Function scope thus allows for **modular design**
+
+If we want to wrap a code snippet and run it immediately we can do so with an IIFE (Immediately Invoked Function Expression, as explained in the first book). This will stop the name of the function from convoluting the global namespace.
+```javascript
+(function foo() {
+  console.log("This is an IIFE. The function's name (foo) is not 'remembered' in the global scope");
+})();
+```
+As with any other function, we are also able to pass in arguments if we wish.
+
+Function expressions (basically, functions wrapped in brackets) are often used in callback functions.They do not need to be named, but can rather be anonymous.
+
+It is best practice to name them always though, because there are advantages.
+- It makes for easier to read code
+- So that it can refer to itself
+- For easier debugging (as the function name appears in stack traces)
+
+
+## Blocks as Scopes
+While many programming languages allow for not just *function* scope but also *block* scope, traditionally JavaScript does not.
+
+```javascript
+function doTheThing() {
+  var i = 10;
+
+  for (var i = 0; i < 5; i++) {
+    console.log(i); // 0 1 2 3 4
+  }
+
+  i += 5;
+  console.log(i); // 10
+}
+```
+
+In the above example we may have expected the second `console.log(i)` to return `15`. The variable `i` is changed by the for loop because the `i` is not block scoped within the for loop.
+
+Instead, `i` is declared and assigned the value `10`. In the for loop it is assigned the value `0` and incremented until it reaches `5`, the loop does not complete this cycle and breaks. `5` is then added to the existing `i` value of `5` and this value is logged, `10`.
+
+This is confusing and one must be very careful of this: loops and conditionals within functions are on the same level of scope as the function they are enclosed in.
+
+But there *is* ways of creating block scope in JS
+
+`with` (as mentioned above) is generally bad practice to use but it does create block scope.
+
+```javascript
+try {
+  gobbledygook; // this should throw an error
+}
+catch (err) {
+  console.log(err); // this will log the error
+}
+```
+The `catch` clause above actually block scopes the error passed into it, but there are problems with some linters complaining about redefinitions.
+
+### The `let` Keyword
+From ES6 we have been blessed with the `let` keyword, which lets us implicitly define variables within a block's scope.
+
+It is suggested to actually wrap any block scopes in an explicit pair of braces to make it super clear where we are scoping our block:
+```javascript
+var goAhead = true;
+
+if (goAhead) {
+  { // we are making it super clear that we are using block scope here
+    let dreams = 'infinity';
+    console.log(dreams); // infinity
+  }
+}
+
+console.log(dreams); // ReferenceError
+```
+
+A massive gotcha with the `let` keyword: **hoisting will not work with block scoped variables**. That means that you cannot call a variable before you have declared it.
+
+This will not work:
+```javascript
+var goAhead = true;
+
+if (goAhead) {
+  {
+    console.log(dreams); // Uncaught ReferenceError: dreams is not defined
+    let dreams = 'infinity';
+  }
+}
+```
+
+Another really useful feature of block scoping is **garbage collection**. Basically, we can allow the JavaScript to 'forget' variables within a scope after it is done with them, in order to optimise our programs.
+
+We must be very careful when re-factoring code, because with the `let` keyword, scopes within blocks can easily be broken.
+
+### The `const` Keyword
+Another addition in ES6 is `const`, which can be used to declare a block scoped variable, but one that is fixed. It is constant and if you try to alter its value, you will be thrown an error.
