@@ -191,3 +191,26 @@ We must be very careful when re-factoring code, because with the `let` keyword, 
 
 ### The `const` Keyword
 Another addition in ES6 is `const`, which can be used to declare a block scoped variable, but one that is fixed. It is constant and if you try to alter its value, you will be thrown an error.
+
+
+## Hoisting
+**Declaration happens before assignment**.
+
+Consider:
+```javascript
+console.log(answer); // undefined
+var answer = 42;
+```
+Two things happen in the last line:
+1. The declaration of `var answer`
+2. The assignment of 42 to the variable `answer`
+
+The compiler will run through the code before it executes it and deal with all declarations and their associated scope before any values are actually assigned. Because of this, when `console.log` is run, `answer` has been *declared* but the number `42` has not yet been *assigned* to it. This explains the return value of `undefined`.
+
+One way to think of this phenomena, is that the *declaration* is moved to the top, it is metaphorically *hoisted*.
+
+Functions are the same. Their declaration is hoisted but their assignment (their innards) are not.
+
+One subtle point is that functions are actually hoisted first, before any variables.
+
+Another thing is that while multiple declarations for a variable will be ignored, declarations for a function will actually be overwritten as we move down the code.
