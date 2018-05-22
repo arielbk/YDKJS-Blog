@@ -18,7 +18,7 @@ In a simple variable declaration, engine and her friends actually run through, m
 LHS lookup would be checking 'answer' (the container name of the article)
 RHS lookup would be checking '42' (the value stored in the variable)
 
-The type of look up that is performed may be more nuanced than you think. Declarations are LHS lookups because we don't care what value already exists in the variable.
+The type of lookup that is performed may be more nuanced than you think. Declarations are LHS lookups because we don't care what value already exists in the variable, we simply check that it exists and assign a value to it.
 
 ```javascript
 function logger(answer) {
@@ -29,17 +29,17 @@ logger(42);
 (Function is declared - actually not a LHS lookup because it is handled by the compiler...) -> Answer variable within function is declared (LHS) -> Logger function is called (RHS lookup) -> 42 is assigned to answer within logger (LHS) -> log method is called within the console object (RHS) -> answer variable is passed into console log (RHS) ... phew!
 
 ### Nested scope
-There are actually multiple scopes. If an RHS lookup not return anything the engine would attempt to move up one layer of scope until it reached the topmost layer (the global scope).
+There are actually multiple scopes. If an RHS lookup does not return anything the engine would attempt to move up one layer of scope until it reached the topmost layer (the global scope).
 
-ReferenceErrors are scope related - the LHS lookup was unsuccessful
+ReferenceErrors are scope related - it means the LHS lookup was unsuccessful
 
 ## Lexical scope
-Lexical scope is in contrast to *dynamic scope*, which is used by a small number of other languages.
+Lexical scope is in contrast to *dynamic scope*, which is used by a small number of other programming languages.
 
 Lexical scope pertains to the process where the source code undergoes lexing/tokenizing, where it is broken up into meaningful (to a computer) pieces. Lexical scope is therefore scope that is defined at the time when this lexing occurs, at this point it is (or should be) set in stone.
 
 ### Lookups
-Look ups happen from where they are called, and then further outer scopes are searched until they are found. **It is just the first matches that are returned.** This is a useful example:
+Lookups happen from where they are called, and then further outer scopes are searched until they are found. **It is just the first matches that are returned.** This is a useful example:
 
 ```javascript
 var a = 10, b = 20, c = 30;
@@ -56,9 +56,9 @@ foo(1); // 1 2 3
 ```
 In this case, although the variables a, b and c have been declared in the global scope, their values within the function scope will be returned because they are the first that are found.
 
-Look up occurs first within the bar function, then the foo function. At this point the variables are found, thus the look up stops. This is a case in which the inner variables *shadow* those in the global scope.
+Lookup occurs first within the bar function, then the foo function. At this point the variables are found, thus the lookup stops. This is a case in which the inner variables *shadow* those in the global scope.
 
-### Cheating Lexical
+### Cheating Lexical Scope
 There are some ways to 'cheat' lexical scope, but they are generally frowned upon and lead to poorer performance. Basically, you should avoid them because they are not worth the performance tradeoff.
 
 `eval()` is one way - it can insert dynamically produced code as if it were there from the start, and thus modify lexical scope. In strict mode, however, it creates its own scope.
@@ -73,10 +73,10 @@ The JS Engine has a number of optimisations for compiling code, and these are un
 
 
 ## Function vs. Block Scope
-**Generally** it is only functions that create scope. So that means that any variables or functions defined within a function are only accessible within that function.
+**Generally** it is only functions that create scope in JS. That means that any variables or functions defined within a function are only accessible within that function.
 
 ### 'Hiding' variables with function scope
-Perhaps the more intuitive way to think of functions is to create a function, and then to write code inside it. But here's another way: we use functions to wrap already existing pieces of code into self-contained units.
+Perhaps the more intuitive way to think of functions is: we create the function, and then we write code inside of it. But here's another way: we use functions to wrap already existing pieces of code into self-contained units.
 
 By wrapping blocks of code in functions we are able to hide their inner components. This is useful in light of the software design principle 'Principle of Least Privilege'.
 

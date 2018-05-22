@@ -11,12 +11,12 @@ I have used JavaScript a little bit before, but here I am starting from the begi
 - `string`
 - `number`
 - `boolean`
-- `null` and `undefined` (interesting that these two are listed together)
+- `null` and `undefined` (null is a 'blank' assigned value, undefined means no assigned value)
 - `object`
 - `symbol` (this is apparently new in ES6... will learn about this later)
 
-I can use `typeof x;` to find out the type of a value, it returns a `string` value.
-`typeof null;` returns `"object"`; this is a longstanding bug.
+I can use `typeof x` (or `typeof(x)`) to find out the type of a value, it returns a `string` value.
+`typeof null` returns `"object"`; this is a longstanding bug.
 
 
 ## Objects
@@ -26,10 +26,10 @@ Dot notation and bracket notation (`object.key` vs `object["key"]`) — dot nota
 
 Moving on: arrays and functions are actually like subtypes of objects...
 
-Arrays are denoted by square brackets, e.g: `var names = ['James', 'Somboon', 'Akanksha']`
+Arrays are denoted by square brackets, e.g: `var names = ['James', 'Somboon', 'Akanksha']`\
 They are a special type of object that uses an index number (starting at 0) as a key. They are accessed through bracket notion: `names[0]` would return `"James"` and `names[2]` would return `"Akanksha"`.
 
-Functions are also a subtype of objects, even though `typeof` returns `"function"`
+Functions are also a subtype of objects, even though `typeof` returns `"function"`\
 Functions can have properties but they are not often used.
 
 Note the difference between `typeof foo` when foo is a function – and `typeof foo()`, which will plug in and check the type of the return value of the foo function.
