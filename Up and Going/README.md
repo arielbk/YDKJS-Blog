@@ -27,7 +27,7 @@ Dot notation and bracket notation (`object.key` vs `object["key"]`) — dot nota
 Moving on: arrays and functions are actually like subtypes of objects...
 
 Arrays are denoted by square brackets, e.g: `var names = ['James', 'Somboon', 'Akanksha']`\
-They are a special type of object that uses an index number (starting at 0) as a key. They are accessed through bracket notion: `names[0]` would return `"James"` and `names[2]` would return `"Akanksha"`.
+They are a special type of object that uses an index number (starting at 0) as a key. They are accessed through bracket notation: `names[0]` would return `"James"` and `names[2]` would return `"Akanksha"`.
 
 Functions are also a subtype of objects, even though `typeof` returns `"function"`\
 Functions can have properties but they are not often used.
@@ -42,9 +42,8 @@ a.toUpperCase() // returns a string with all uppercase letters
 a.toFixed(x) // returns a float to x decimal places
 ```
 
-From my understanding this is possible because the 'object' (uncapitalised) is a prototype of its 'native', or 'Object' (capitalised).
-
-I'm sure I will come to this more later.
+This is possible because the 'object' (uncapitalised) is a prototype of its 'native', or 'Object' (capitalised).\
+These concepts will be explained in detail later in the series
 
 
 ## Comparing values always produces a boolean (true or false)
@@ -62,7 +61,7 @@ var result = a * b; // returns the number 43
 ```
 Even though b is actually a string, this works because `var b` is **implicitly coerced**.
 
-But be careful, because: `result = a + b;` will return '421', instead treating both as strings and concatenating...
+But be careful, because: `result = a + b;` will return `421`, instead treating both as strings and concatenating them...
 
 ### 'Truthy' values
 - `"any none empty string"`
@@ -74,14 +73,14 @@ But be careful, because: `result = a + b;` will return '421', instead treating b
 
 ### 'Falsy' values
 - `""` (an empty string)
-- `0`, `-0`, `NaN` (as a sidenote - I would have thought `-0` would be simplified to `0`.. it is not)
+- `0`, `-0`, `NaN` (I would have thought `-0` would be simplified to `0`.. it is not)
 - `null`, `undefined`
 - `false`
 
 We must be careful of thinking we have coerced a value to a boolean when actually we haven't..
 
 ### Equality
-`==` loosely equal vs. `===` strictly equal (where no implicit coercion will occur)
+`==` loosely equal vs. `===` strictly equal (where no implicit coercion will occur)\
 `0 == ""` returns `true` but `0 === ""` returns `false`.
 
 This is one to watch out for... 'non-primitive' values are compared **by reference** only. So consider this example given in the book:
@@ -95,11 +94,11 @@ a == b;		// false
 ```
 
 ### Inequality
-`<` `>` `<=` and `>=` - pretty straightforward I guess...
+`<` `>` `<=` and `>=` - pretty straightforward I guess...\
 If one value cannot be coerced then we can come across situations where `a > b`, `a < b` and `a == b` are all false.
 
 ## Variables
-Reserve words we cannot use
+We cannot use reserve words as variable names\
 Variable names must be valid **identifiers** - they must start with a letter, `$` or `_`, and they can only contain these characters and numbers
 
 ## Scope
@@ -113,10 +112,10 @@ If we set a variable without formally declaring it, it can break the scope and a
 The `let` keyword from ES6 allows us to be more precise with our scope. It will create a scope for that variable within any pair of `{}` (any block) including loops and conditionals, rather than only within a function.
 
 ## Conditionals
-A switch statement can be a useful alternative for a long list of if-elses.
+A switch statement can be a useful alternative for a long list of if-elses.\
 The biggest slip up with these is forgetting to break the statement. Purposefully breaking a statement and instead letting it run on can also be very useful.
 
-`var conclusion = a > b ? "a is greater than b" : "a is not greater than b";`
+`var conclusion = a > b ? "a is greater than b" : "a is not greater than b";`\
 Ternary operator is also a useful one for short if-else statements.
 
 ## Strict mode
@@ -124,13 +123,13 @@ It ensures the code is safer and more optimisable by the JS engine.
 
 Put `"use strict";` at the beginning of anything, depending on where you want it in terms of scope; it can be just inside a function or it can be global.
 
-One important thing is it stops variables from being **set** without first being **declared**.
+One important thing is it stops variables from being **assigned a value** without first being **declared** (and thus defaulting to the global scope).
 
 ## Functions as Values
 Functions themselves are values. They can be named or they can be anonymous. They can be assigned to a variable or not.
 
 ## IIFE = Immediately Invoked Function Expression
-Wrap a function in `()`'s and add another `()` to the end to invoke it immediately.
+Wrap a function in `( .. )`'s and add another `()` to the end to invoke it immediately.
 ```javascript
 (function IIFE() {
   console.log('This function is declared and immediately called');
@@ -139,10 +138,10 @@ Wrap a function in `()`'s and add another `()` to the end to invoke it immediate
 
 This method is often used to do something immediately without affecting the surrounding scope, because scope is confined to the function itself.
 
-## Closure
-Now this concept really confuses me. Right now it seems unintuitive...
-Let's try to wrap my head around this. So creating a customisable adder function...
 
+## Closure
+Now this concept can be pretty confusing and even seem unintuitive.\
+Let's try to wrap our head around this. Creating a customisable adder function...
 ```javascript
 function makeAdder(x) {
   function add(y) {
@@ -155,35 +154,35 @@ var addFive = makeAdder(5);
 console.log(addFive(2)); // 7
 ```
 
-So when the makeAdder function is invoked by assigning it to a variable, a value is passed in. For `addFive` this is 5. That value is then passed into the `add` function within `makeAdder` and there it is **remembered**.
+When the makeAdder function is invoked by assigning it to a variable, a value is passed in. For `addFive` this is 5. That value is then passed into the `add` function within `makeAdder` and there it is **remembered**.
 
 `makeAdder` then actually returns the function within itself, `add()`, along with the value that was passed into it and saved.
 
 So when makeAdder returns the function the variable definition effectively becomes:
-
 ```javascript
 var addFive = function add(y) {
                 return 5 + y;
               }
 ```
-So, now addFive can be used as a function with the value passed in when it was created remembered.
 
-Closures are particularly helpful with public APIs, variables can be instantiated from a function and values can be stored inside them privately. Still struggling to get my head around this one, but I'm sure it will come with practice. Scopes and Closures is the next book, after all.
+So, now addFive can be used as a function in its own right. The value that was passed in when it was created is remembered/preserved.
+
+Closures are particularly helpful with public APIs, variables can be instantiated from a function and values can be stored inside them privately. This is a tricky concept... Scopes and Closures is the next book in the series, and will explore this more deeply.
 
 ## This identifier
-Okay, this will be interesting to look at. I have been using `this` for a while now, and I sort of know what its all about, but not really...
-**`this` does not refer to the function itself, but rather how it was called**
+I have been using `this` for a while now, and I sort of know what its all about, but not really...
+**`this` does not refer to the function itself, but rather to where it was called from**
 
 `this` can work in one of four ways:
-- if there is nothing within a basic function that `this` can refer to it will search for a global variable, or else return `undefined` in strict-mode
+- if there is nothing within a basic function that `this` can refer to it will search for a global variable, or instead return `undefined` in strict-mode
 - if you call a function as a value within an object, `this` refers to that object
 - when the call() method is used, `this` belongs to the function where the call is
 - if you use `new` then `this` is reset to a brand new instance of the function
 
 ## Prototypes
-If you reference a property on an object and it doesn't exist on that object explicitly, the objects prototype will be searched as a sort of 'fallback'.
+If you reference a property on an object and it doesn't exist on that object explicitly, the object's prototype will be searched as a sort of 'fallback'.
 
-This behaviour can emulate class and inheritance, but it is not that. It is far more realistic and beneficial to view it as 'behaviour delegation' – covered indepth later.
+This behaviour can emulate class and inheritance, but it is *not actually* that. It is far more realistic and beneficial to view it as 'behaviour delegation' – this will be covered in depth later.
 
 ## Old and New
 Many of the techniques in JS will not work on older browsers, and this needs to be addressed. We have two options: polyfilling and transpiling.
@@ -198,7 +197,7 @@ Transpiling is a portmanteau of transforming and compiling. It is necessary when
 
 By using a polyfill we can produce more current, readable and performance-optimised code while still serving working code to older browsers.
 
-JS is changing constantly and will continue, so get into the habit of using a transpiler now.
+JS is changing constantly and will continue to change, so get into the habit of using a transpiler now.
 
 ### Non-JavaScript
 A lot of the stuff that we write in JS is not actually directly controlled by JavaScript itself.
@@ -209,6 +208,4 @@ Keep this in mind.
 
 ## Review
 
-This has been a run-through of the foundations of JavaScript programming. The following books will get into some of the more gritty details of the language.
-
-Thinking about it, I'm still not entirely sure why you would assign a function to a variable in the first place. Why do this when you can just name the variable... The answer will become clear very soon, I'm sure.
+This has been a run-through of the foundations of JavaScript programming. The next books get into some of the more gritty details of the language.
