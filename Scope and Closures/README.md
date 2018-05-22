@@ -223,3 +223,5 @@ function sayHello() {
 	return 'Hi, Hey!';
 }
 ```
+
+# Closure...
