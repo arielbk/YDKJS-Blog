@@ -269,10 +269,69 @@ Closure can cause particular confusion when it comes to loops, specifically, cal
 ```javascript
 for (var i = 0; i < 5; i++) {
   setTimeout( function logger() {
-    console.log(i); // (5) 4
-  }, 1000);
+    console.log(i); // (5) 5
+  }, i*1000);
 }
 ```
-This snippet simply returns the number 4, 5 times. Why is that?\
+This snippet simply returns the number 5, 5 times. Why is that?\
+Because function callbacks will run *after* the loop has run through. `var i` reaches 5, the loop stops, and then the callback function is run 5 times.
 
-To be continued...
+**The callback function and the for loop both belong to the same scope.**
+
+We can create a scope for the callback function by using an IIFE, and pass in an instance of i every time for it to use, like so:
+
+```javascript
+for (var i = 0; i < 5; i++) {
+  ( function() {
+    var j = i;
+    setTimeout ( function logger() {
+    console.log(j); // 0 1 2 3 4
+  }, i*1000)
+  })();
+}
+```
+
+### Block scoping and the `let` keyword
+The `let` allows us to block scope the loop, meaning we could place `let j = i;` at the top, but it also has another extremely helpful attribute when it is used in the head of a for loop: **it is declared afresh for each iteration of the loop.**
+
+That means that to solve the problem above we can just use the `let` keyword:
+```javascript
+for (let i = 0; i < 5; i++) {
+  setTimeout(function logger() {
+    console.log(i); // 0 1 2 3 4
+  }, i*1000);
+}
+```
+Simple, and elegant.
+
+
+## Modules
+The basic module pattern is as follows:
+```javascript
+function moduleCreator() {
+  var something = 'yeah';
+  var andAnother = 'nah';
+
+  function logSomething() {
+    console.log(something);
+  }
+
+  function splitAnother() {
+    console.log(andAnother.split(''));
+  }
+
+  return {
+    logSomething: logSomething,
+    splitAnother: splitAnother,
+  }
+}
+
+var myModule = moduleCreator();
+
+myModule.logSomething(); // 'yeah'
+myModule.splitAnother(); // ['n', 'a', 'h']
+```
+// What it does
+// Why would we want this
+
+To be continued
