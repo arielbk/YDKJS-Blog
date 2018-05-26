@@ -308,7 +308,7 @@ Simple, and elegant.
 ## Modules
 The basic module pattern is as follows:
 ```javascript
-function moduleCreator() {
+function ModuleCreator() {
   var something = 'yeah';
   var andAnother = 'nah';
 
@@ -326,12 +326,68 @@ function moduleCreator() {
   }
 }
 
-var myModule = moduleCreator();
+var myModule = ModuleCreator();
 
 myModule.logSomething(); // 'yeah'
 myModule.splitAnother(); // ['n', 'a', 'h']
 ```
-// What it does
-// Why would we want this
 
-To be continued
+The `ModuleCreator` function provides a way to create the module. Its first letter is capitalised because it is convention that prototypes are.
+
+When it is executed and assigned to the variable `myModule`, the returned object literals point to functions within the `ModuleCreator` function. Because of closure, they are able to access the original `ModuleCreator`'s scope. `myModule` is now actually an instantiation of `ModuleCreator`.
+
+jQuery is a known example: the `jQuery` and `$` identifiers are just ways to get to a function, with other various inner functions.
+
+So there are two properties that make this pattern the 'module pattern':
+1. There is an enclosing function scope around `ModuleCreator`
+2. The function returns inner functions (`logSomething` and `splitAnother`) that have closure over their surrounding function. `ModuleCreator`
+
+There are other slight variations to this, but this is the basic pattern.
+
+### Modern Modules
+Modern 'module managers' wrap up these modules patterns into a user-friendly API.
+
+I find the code too verbose to actually post here, and it is the concept that is important. This may be something I return to when I actually have more practice with module managers.
+
+A function can be used to return a 'module manager', following the basic premise of the `ModuleCreator` module pattern. A function within that function can define modules, along with their dependencies, and another function can call one of these modules.
+
+There is no magic happening here; these patterns rely heavily on closure.
+
+## Future Modules
+ES6 allows for simpler syntax and to keep modules in different files and import them.
+
+**This is in a file, greetings.js:**
+```javascript
+function hello(someone) {
+  return 'Hello there, ' + someone;
+}
+
+export hello;
+```
+
+**This is in another file, users.js:**
+```javascript
+// this file imports just the function hello, from greetings.js
+import hello from 'bar'; // notice the lack of '.js' at the end
+
+var user = 'Ariel';
+
+function logGreeting(person) {
+  console.log(hello(person));
+}
+
+export logGreeting;
+```
+
+**This is the main.js file, where it all comes together:**
+```javascript
+// this imports everything from greetings and users as modules
+module greetings from 'greetings';
+module users from 'users';
+
+console.log(hello('Leira'));
+
+logGreeting('Ireal');
+```
+
+`users.js` pulls in the `hello` function from `greetings.js`, while `main.js` imports both `users.js` and `greetings.js` as modules. The separate files each have their own separate scope closure.
