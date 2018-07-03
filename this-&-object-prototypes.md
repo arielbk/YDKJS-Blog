@@ -94,12 +94,39 @@ var obj = {
 }
 obj.foo(); // 42
 ```
-In this case it is the `obj` object that provides context; in this case it is the call site of the function `foo`.
+In this case it is the `obj` object that provides context because is the call site of the function `foo`.
 
 It is always just the last object which holds the function reference that provides the call site, in the case that object properties link together. For example: `obj1.obj2.foo()` – it is `obj2` that provides the call site.
 
-One 'gotcha' when `this` is implicitly bound like this is when a function loses that binding because of some subtle mistake. If you assign a function call from an object to a variable, for instance, the function called by that variable will no longer have the context of the object, because the object property is passed by reference to the new variable, and not by value.
+One 'gotcha' when `this` is implicitly bound like this is when a function loses that binding. `var bar = obj.foo; bar();` (where foo is a function reference inside of the `obj` object) is actually synonymous with `var bar = foo`. The assignment does not retain the context of foo. **This can be tricky to spot when working with callback functions.** Even built-in ones, like `setTimeout`.
 
-This idea becomes more applicable and dangerous when we consider callback functions.
+### Explicit Binding
+Explicit binding allows us to explicitly define the context in which a function is called.
+```javascript
+foo.call(obj) // invokes foo in the context of the `obj` object
+foo.apply(obj) // for this use case these two behave exactly the same
+```
 
+#### Hard Binding
+We can actually assign a call or apply method to a variable and call on that as we wish, but as of ES5 we also have `Function.prototype.bind` as a built in method for hard binding.
+
+`var bar = foo.bind(obj)` would return a new function with an explicitly bound context of `obj` and assign it to `bar`.
+As of ES6, the returned function also has a `name` property on it. If we were to call `bar.name`, `"bound foo"` would be returned.
+
+Many functions will allow you to enter an argument to run functions in a specific context, `forEach` is one of these.
+
+## `new` Binding
+This is an interesting one. The `new` keyword can be applied to any function call, in order to make it a *constructor call* to that function. An object is constructed and if the function does not itself return an object, that constructed object is set as an explicit binding.
+
+Consider this code (from the book):
+```javascript
+function foo(a) {
+	this.a = a;
+}
+
+var bar = new foo( 2 );
+console.log( bar.a ); // 2
+```
+
+## Everything in order.
 To be continued...
