@@ -129,4 +129,34 @@ console.log( bar.a ); // 2
 ```
 
 ## Everything in order.
-To be continued...
+*Default binding* is, naturally, overwritten by any other `this` binding and *explicit binding* takes precedence over *implicit binding*.
+
+`new` binding takes precedence over implicit binding.
+
+The ES5+ implementation of .bind explicit binding, is actually able to be overridden by the `new` constructor call. With this we can pass in arguments to a function and hold them there as defaults...
+
+This is the example from the book: 
+```javascript
+function foo(p1,p2) {
+	this.val = p1 + p2;
+}
+
+var bar = foo.bind( null, "p1" ); // using `null` because it will be overridden by `new` anyway
+var baz = new bar( "p2" );
+baz.val; // p1p2
+```
+
+## Basic rules for `this`
+In order of precedence:
+1. If the function is called with `new`, `this` is the newly created object
+2. `call` or `apply` (explicit binding)
+3. If the function is called with a context (`obj.foo()`)
+4. Otherwise, default binding. `this` becomes global variable, or `undefined` in strict mode.
+
+
+### Exceptions
+
+#### Ignored `this`
+Passing `null` or `undefined` to `call`, `apply` or `bind` will cause them to ignore these values and instead revert to default binding.
+
+You may do this in order to use `apply` to spread out the values of arrays as arguments to pass into a function, you may also use it to [*curry*](https://en.wikipedia.org/wiki/Currying) value into a function with `bind`.
