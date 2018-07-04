@@ -159,4 +159,17 @@ In order of precedence:
 #### Ignored `this`
 Passing `null` or `undefined` to `call`, `apply` or `bind` will cause them to ignore these values and instead revert to default binding.
 
-You may do this in order to use `apply` to spread out the values of arrays as arguments to pass into a function, you may also use it to [*curry*](https://en.wikipedia.org/wiki/Currying) value into a function with `bind`.
+You may do this in order to use `apply` to spread out the values of arrays as arguments to pass into a function (but note that ES6 now has the `...` spread operator), you may also use it to [*curry*](https://en.wikipedia.org/wiki/Currying) value into a function with `bind`.
+
+This can be dangerous, because you may make a null argument call to a function that you did not author and `this` would refer to the global variable, creating a hard to track down bug.
+
+A safer way to do this, then, is to pass in a completely empty object (`var ø = Object.create(null)`, as a safe fallback.
+
+There are also options for *soft binding* functions by creating our own utility.
+
+## Lexical `this`
+ES6's arrow functions...
+You cannot use `this` directly within an arrow function, but you can next one inside of another function. The `this` is then bound at call time, and this cannot be changed, even with `new`.
+
+But why use 'tricks'? Stick to lexical scope or embrace scope.
+
