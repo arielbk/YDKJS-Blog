@@ -169,7 +169,48 @@ There are also options for *soft binding* functions by creating our own utility.
 
 ## Lexical `this`
 ES6's arrow functions...
-You cannot use `this` directly within an arrow function, but you can next one inside of another function. The `this` is then bound at call time, and this cannot be changed, even with `new`.
+Arrow function ignores the traditional `this` rules, instead adhering to *lexical scope*, *binding* whatever `this` is at call time. Basically `this` inside of the arrow function is the `this` of whichever context it is called in, and it remains that. It cannot be changed.
 
-But why use 'tricks'? Stick to lexical scope or embrace scope.
+**This is confusing and will take some time to get used to...**
+Lexical binding is illustrated in the book with the following example:
+```javascript
+function foo() {
+	// return an arrow function
+	return (a) => {
+		// `this` here is lexically adopted from `foo()`
+		console.log( this.a );
+	};
+}
+
+var obj1 = {
+	a: 2
+};
+
+var obj2 = {
+	a: 3
+};
+
+var bar = foo.call( obj1 );
+bar.call( obj2 ); // 2, not 3!
+```
+
+A great example from [Stackoverflow](https://stackoverflow.com/questions/44080949/value-of-this-inside-arrow-function-inside-an-object):
+``` javascript
+let arrow = {
+  test: () => {
+    console.log('arrow: this === window...', this === window);
+  }
+};
+
+let nonarrow = {
+  test: function() {
+    console.log('non-arrow: this === window...', this === window);
+  }
+};
+
+arrow.test(); // arrow: this === window... true
+nonarrow.test(); // non-arrow: this === window... false
+```
+
+But why use 'tricks' to escape from the way that `this` works? It will lead to more difficult code. Stick to lexical scope or embrace the way that `this` works.
 
