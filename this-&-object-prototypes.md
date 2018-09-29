@@ -214,3 +214,96 @@ nonarrow.test(); // non-arrow: this === window... false
 
 But why use 'tricks' to escape from the way that `this` works? It will lead to more difficult code. Stick to lexical scope or embrace the way that `this` works.
 
+
+## Objects
+As one of the six primary types, objects are the building-blocks upon which much of JS is built.
+*Functions and arrays, for example, are known as *complex primitives*, they are objects with extra features added on.*
+
+The relationship between these 'kind of' object subtypes is more complicated than you might think. A string, for example, could be either a string primitive or a String object. When it is defined with a literal (as it normally is and should be) it is a string literal. Object methods (such as `.length`) are available on it because it is automatically coerced.
+
+**Contents** of an object are stored in *locations*, property names act as pointers to the data inside of them.
+
+Object property names are *always* strings, even if they look like a number, and will be first be coerced when performing a lookup.
+
+### Computed Property Names
+These are a cool feature of ES6 that I didn't know about. Check it out:
+```javascript
+var prefix = "foo";
+
+var myObject = {
+	[prefix + "bar"]: "hello",
+	[prefix + "baz"]: "world"
+};
+
+myObject["foobar"]; // hello
+myObject["foobaz"]; // world
+```
+
+### Property vs Method
+JS doesn't technically have 'methods', we just access a property inside of a object that happens to be a function. The function doesn't *belong* to the object, but its `this` may be bound to it, only because it is defined at call time.
+
+### Arrays
+Arrays are more structured objects, they have *actual* numbered indices rather than string property names.
+String property names can even be added to an array, but why? Just make it an object.
+
+### Duplicating Objects
+This is tricky because objects are reference based.
+
+There are different ways to duplicate an object depending on whether we want a *shallow copy* or a *deep copy*, when an object is self referential, a *deep copy* could even send us on an infinite loop.
+
+There is this trick for deep cloning:
+```javascript
+var newObj = JSON.parse( JSON.stringify( someObj ) );
+```
+
+ES6 has a method for shallow cloning:
+```javascript
+var newObj = Object.assign( {}, myObject );
+```
+I'm not sure why he doesn't include the ES6 spread operator here for shallow cloning:
+```javascript
+var newObjc = {...myObject};
+```
+
+### Property Descriptors
+Examples from the book:
+```javascript
+var myObject = {
+	a: 2
+};
+
+Object.getOwnPropertyDescriptor( myObject, "a" );
+// {
+//    value: 2,
+//    writable: true,
+//    enumerable: true,
+//    configurable: true
+// }
+```
+
+These are the defaults. We can also define this explicitly like so:
+```javascript
+var myObject = {};
+
+Object.defineProperty( myObject, "a", {
+	value: 2,
+	writable: true,
+	configurable: true,
+	enumerable: true
+} );
+
+myObject.a; // 2
+```
+
+- **Writable** defines whether the value can be changed
+- **Configurable** defines whether the property descriptors themselves can be changed. *A type error will be thrown if this is violated*. It also stops the `delete` operator from being used on the value. 
+- **Enumerable** defines whether the value is included in enumeration such as a `for...in` loop.
+
+Its important to remember that the immutability here is a shallow one. The reference cannot be changed, but the value at the reference itself can. (Like a `const` object in ES6).
+
+**Prevent extensions** to an object with `Object.preventExtensions(myObject)`
+
+`Object.seal(..)` prevents extensions and sets configurable to false for all properties. Values still can be changed.
+
+`Object.freeze(..)` prevents extensions, sets configurable to false for all properties and disallows any value changes.
+
